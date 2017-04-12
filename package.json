@@ -1,0 +1,26 @@
+{
+    "name": "nightmarejs-demo",
+    "version": "1.0.0",
+    "description": "Demo for basic nightmare js",
+    "author": "Joshua McKinney",
+    "license": "MIT",
+    "dependencies": {
+        "d3-dsv": "^1.0.5",
+        "nightmare": "^2.9.1",
+        "nightmare-helpers": "git+https://github.com/byuicampuscd/nightmare-helpers.git",
+        "prompt": "^1.0.0"
+    },
+    "main": "cli.js",
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/byuitechops/nightmarejs-demo.git"
+    },
+    "bugs": {
+        "url": "https://github.com/byuitechops/nightmarejs-demo/issues"
+    },
+    "homepage": "https://github.com/byuitechops/nightmarejs-demo#readme"
+}
