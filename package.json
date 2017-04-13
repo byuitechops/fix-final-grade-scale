@@ -1,7 +1,7 @@
 {
-    "name": "nightmarejs-demo",
+    "name": "fix-final-grade-scale",
     "version": "1.0.0",
-    "description": "Demo for basic nightmare js",
+    "description": "Changes the grade scale in d2l courses to a given setting",
     "author": "Joshua McKinney",
     "license": "MIT",
     "dependencies": {
