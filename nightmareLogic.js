@@ -42,7 +42,7 @@ function done(nightmare, promptData) {
     var errFileName = getFreeFileName("Errors", ".json");
     var coursesFileName = getFreeFileName("courseDataOut", ".csv");
     nightmare
-        //.end()
+        .end()
         .then(function () {
             var cols = ["name", "ou", "selectedValue", "newSelectedValue", "selectedText", "newSelectedText"];
             //write out the errors
