@@ -6,7 +6,7 @@ var Nightmare = require('nightmare'),
     errors = [],
     fs = require('fs'),
     dsv = require('d3-dsv'),
-    fixIt = false;
+    fixIt = true;
 
 //add the helpers on
 require('nightmare-helpers')(Nightmare);
@@ -90,7 +90,6 @@ function fixFinalGradeScheme(index, nightmare, promptData) {
         //make sure it changed
         .evaluate(getCurrentGradeScale)
         .then(function (data) {
-            console.log("data:", data);
             promptData.ouList[index].newSelectedValue = data.selectedValue;
             promptData.ouList[index].newSelectedText = data.selectedText;
             console.log("Done with " + promptData.ouList[index].name);
@@ -140,7 +139,6 @@ function goToNextCourse(index, nightmare, promptData) {
             //see if we are just reading the current status
             if (fixIt) {
                 fixFinalGradeScheme(index, nightmare, promptData);
-
             } else {
                 goToNextCourse(index, nightmare, promptData);
             }
@@ -167,7 +165,7 @@ module.exports = function startNightmare(promptData) {
         //        },
         typeInterval: 20,
         alwaysOnTop: false,
-        waitTimeout: 100 * 1000,
+        waitTimeout: 15 * 1000,
         width: 1920,
         height: 1080
     });
