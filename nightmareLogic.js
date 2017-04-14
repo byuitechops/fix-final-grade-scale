@@ -5,7 +5,8 @@ var Nightmare = require('nightmare'),
     prompt = require('prompt'),
     errors = [],
     fs = require('fs'),
-    dsv = require('d3-dsv');
+    dsv = require('d3-dsv'),
+    fixIt = false;
 
 //add the helpers on
 require('nightmare-helpers')(Nightmare);
@@ -41,7 +42,7 @@ function done(nightmare, promptData) {
     var errFileName = getFreeFileName("Errors", ".json");
     var coursesFileName = getFreeFileName("courseDataOut", ".csv");
     nightmare
-        .end()
+        //.end()
         .then(function () {
             var cols = ["name", "ou", "selectedValue", "newSelectedValue", "selectedText", "newSelectedText"];
             //write out the errors
@@ -57,6 +58,18 @@ function done(nightmare, promptData) {
         });
 }
 
+function waitForSuccessMessage() {
+
+    var i,
+        eles = document.querySelectorAll('[role="alert"]'),
+        done = false;
+    for (i = 0; i < eles.length; ++i) {
+        done = done || eles[i].innerText.search(/Saved successfully/i) > -1;
+    }
+
+    return done;
+}
+
 function getCurrentGradeScale() {
     var selected = document.querySelector('[name*=GradeScheme]').selectedOptions[0];
     return {
@@ -68,19 +81,24 @@ function getCurrentGradeScale() {
 
 function fixFinalGradeScheme(index, nightmare, promptData) {
     nightmare
-        .select('[name*=GradeScheme]', '112')
-        .click('table a.vui-button-primary')
+        //change the grade Scheme
+        .select('[name*=GradeScheme]', promptData.gradeScale)
+        //click save
+        .click('a.d2l-button:nth-child(2)')
+        //wait for the conformation
+        .wait(waitForSuccessMessage)
+        //make sure it changed
         .evaluate(getCurrentGradeScale)
         .then(function (data) {
-
+            console.log("data:", data);
             promptData.ouList[index].newSelectedValue = data.selectedValue;
             promptData.ouList[index].newSelectedText = data.selectedText;
-
             console.log("Done with " + promptData.ouList[index].name);
+
             goToNextCourse(index, nightmare, promptData);
         })
         .catch(function (e) {
-            console.log("Error with " + promptData.ouList[index].name);
+            console.log("ERROR with " + promptData.ouList[index].name);
             errors.push({
                 index: index,
                 course: promptData.ouList[index],
@@ -103,7 +121,7 @@ function goToNextCourse(index, nightmare, promptData) {
 
     nightmare
         .run(function () {
-            console.log((index + 1) + ":", "Starting " + promptData.ouList[index].name);
+            console.log((index + 1) + ":", "Starting " + promptData.ouList[index].name + " | " + promptData.ouList[index].ou);
         })
         //go to grades page
         .goto(promptData.urlPrefix + '/d2l/lms/grades/admin/manage/gradeslist.d2l?ou=' + promptData.ouList[index].ou)
@@ -119,9 +137,13 @@ function goToNextCourse(index, nightmare, promptData) {
         .then(function (data) {
             promptData.ouList[index].selectedValue = data.selectedValue;
             promptData.ouList[index].selectedText = data.selectedText;
+            //see if we are just reading the current status
+            if (fixIt) {
+                fixFinalGradeScheme(index, nightmare, promptData);
 
-            //fixFinalGradeScheme(index, nightmare);
-            goToNextCourse(index, nightmare, promptData);
+            } else {
+                goToNextCourse(index, nightmare, promptData);
+            }
         })
         .catch(function (e) {
             console.log("Error with " + promptData.ouList[index].name);
