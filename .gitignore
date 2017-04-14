@@ -2,5 +2,6 @@ node_modules
 *.csv
 *.json
 *.xlsx
+courseDataOut*
 !exampleOuList.csv
 !package.json
