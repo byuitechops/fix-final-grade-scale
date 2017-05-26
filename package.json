@@ -2,8 +2,6 @@
     "name": "fix-final-grade-scale",
     "version": "1.0.0",
     "description": "Changes the grade scale in d2l courses to a given setting",
-    "author": "Joshua McKinney",
-    "license": "MIT",
     "dependencies": {
         "d3-dsv": "^1.0.5",
         "nightmare": "^2.9.1",
@@ -22,5 +20,7 @@
     "bugs": {
         "url": "https://github.com/byuitechops/nightmarejs-demo/issues"
     },
-    "homepage": "https://github.com/byuitechops/nightmarejs-demo#readme"
+    "homepage": "https://github.com/byuitechops/nightmarejs-demo#readme",
+    "author": "Joshua McKinney",
+    "license": "MIT"
 }
