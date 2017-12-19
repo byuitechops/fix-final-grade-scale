@@ -18,6 +18,7 @@ It will ask you all the things that you need to give it in the cli
    5. Password for the admin login
    
 Also see [course-list-generator](http://www.github.com/byuitechops/course-list-generator) for help in making the list of ou numbers.
+when you run course-list-generator, you don't need to use anything for the query. This will insure that you fix every course.
 
 ## Output
 It writes a CSV file to the current directory that shows the value and text of the final grade select element before and after the program ran. It also writes a file that has recorded any courses that threw an error. 
