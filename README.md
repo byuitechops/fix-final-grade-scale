@@ -12,7 +12,7 @@ npm install
 ## Instructions
 It will ask you all the things that you need to give it in the cli
    1. Grade Scale - use the value that is on the `option` elemet in the `select` element for the grade scale you want (Pathway_Standard). Use inspect to find the value.
-   2. The csv listing the courses you want. See `testOus.csv` for an example. 
+   2. The csv listing the courses you want. Defults to the name of the CSV file that `course-list-generator` makes. See `testOus.csv` for an example to make one by hand. 
    3. Which domain do you want it in. Pathway or BYUI
    4. Username for the admin login
    5. Password for the admin login
