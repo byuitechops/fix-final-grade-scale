@@ -7,16 +7,19 @@ var prompt = require('prompt');
 var promptSettings = [
     {
         name: 'gradeScale',
-        message: "What grade scale do you want the final grade to be set to?"
+        message: "What grade scale value? Use the value on the option element that equals Pathway_Standard",
+        default: "112"
     },
     {
         name: 'ouFile',
         message: "Name of ou list csv file",
-        pattern: /.*\.csv/
+        pattern: /.*\.csv/,
+        default: "ols.csv"
     },
     {
         name: 'domain',
-        message: "Which domain? Type 'p' for Pathway and anything else for BYUI"
+        message: "Which domain? Type 'p' for Pathway and anything else for BYUI",
+        default: "p"
     },
     {
         name: 'username',

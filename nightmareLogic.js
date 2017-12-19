@@ -6,7 +6,13 @@ var Nightmare = require('nightmare'),
     errors = [],
     fs = require('fs'),
     dsv = require('d3-dsv'),
-    fixIt = true;
+    fixIt = true,
+    SELECT = {
+        gradeSchemeSelect : `select[title*="Grade Scheme"]`,
+        mainButton: `button[primary=primary]`,
+        saveButton : `d2l-floating-buttons button:nth-child(2)`,
+        alertMessage : `[role="alert"]`
+    };
 
 //add the helpers on
 require('nightmare-helpers')(Nightmare);
@@ -58,20 +64,8 @@ function done(nightmare, promptData) {
         });
 }
 
-function waitForSuccessMessage() {
-
-    var i,
-        eles = document.querySelectorAll('[role="alert"]'),
-        done = false;
-    for (i = 0; i < eles.length; ++i) {
-        done = done || eles[i].innerText.search(/Saved successfully/i) > -1;
-    }
-
-    return done;
-}
-
-function getCurrentGradeScale() {
-    var selected = document.querySelector('[name*=GradeScheme]').selectedOptions[0];
+function getCurrentGradeScale(SELECT) {
+    var selected = document.querySelector(SELECT.gradeSchemeSelect).selectedOptions[0];
     return {
         selectedValue: selected.value,
         //the " are for excel
@@ -82,13 +76,13 @@ function getCurrentGradeScale() {
 function fixFinalGradeScheme(index, nightmare, promptData) {
     nightmare
         //change the grade Scheme
-        .select('[name*=GradeScheme]', promptData.gradeScale)
+        .select(SELECT.gradeSchemeSelect, promptData.gradeScale)
         //click save
-        .click('a.d2l-button:nth-child(2)')
+        .click(SELECT.saveButton)
         //wait for the conformation
-        .wait(waitForSuccessMessage)
+        .waitURL('feedback=2')
         //make sure it changed
-        .evaluate(getCurrentGradeScale)
+        .evaluate(getCurrentGradeScale, SELECT)
         .then(function (data) {
             promptData.ouList[index].newSelectedValue = data.selectedValue;
             promptData.ouList[index].newSelectedText = data.selectedText;
@@ -131,8 +125,8 @@ function goToNextCourse(index, nightmare, promptData) {
         .click('.vui-dropdown-menu ul li:first-child a')
         //go to page that we can change the final grade dropdown
         //change the grade scheme
-        .wait('[name*=GradeScheme]')
-        .evaluate(getCurrentGradeScale)
+        .wait(SELECT.gradeSchemeSelect)
+        .evaluate(getCurrentGradeScale, SELECT)
         .then(function (data) {
             promptData.ouList[index].selectedValue = data.selectedValue;
             promptData.ouList[index].selectedText = data.selectedText;
@@ -176,7 +170,7 @@ module.exports = function startNightmare(promptData) {
         .goto(promptData.urlPrefix + '/d2l/login?noredirect=1')
         .type("#userName", promptData.username)
         .type("#password", promptData.password)
-        .click('a.vui-button-primary')
+        .click(SELECT.mainButton)
         .waitURL(promptData.urlPrefix + "/d2l/home")
 
         //manage grades > final caclc grade >
@@ -187,9 +181,9 @@ module.exports = function startNightmare(promptData) {
     .click('.vui-dropdown-menu ul li:first-child a')
     //go to page that we can change the final grade dropdown
     //change the grade scheme
-    .wait('[name*=GradeScheme]')
+    .wait(SELECT.gradeSchemeSelect)
     .evaluate(getCurrentGradeScale)*/
-        //.select('[name*=GradeScheme]', '112')
+        //.select(SELECT.gradeSchemeSelect, '112')
 
 
 
